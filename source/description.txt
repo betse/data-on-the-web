@@ -1,0 +1,14 @@
+Data Source 1: (GDP by Country)
+- Format: CSV
+- Link: https://data.worldbank.org/indicator/NY.GDP.MKTP.CD
+- Description: Provides data on Gross Domestic Product (GDP) in current US dollars for various countries, sourced from the World Bank’s World Development Indicators. This dataset includes annual GDP values per country, reflecting economic output and standard of living metrics.
+
+Data Source 2: (Human Development Index):
+- Format: CSV
+- Link: https://hdr.undp.org/data-center/human-development-index#/indicies/HDI
+- Description: Contains the Human Development Index (HDI) data from the United Nations Development Programme (UNDP), measuring average achievement in key dimensions of human development: health (life expectancy), education (years of schooling), and standard of living (GNI per capita). Data is available for multiple countries over time.
+
+Data Source 3: (Internet Usage Statistics)
+- Format: CSV
+- Link: https://datahub.itu.int/data/
+- Description: Offers data on internet usage from the International Telecommunication Union (ITU), including indicators such as the percentage of individuals using the internet per country. This dataset reflects digital connectivity and ICT adoption across different economies.

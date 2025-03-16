@@ -1,0 +1,38 @@
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix ex: <http://example.org/nswi144/> .
+
+# DCAT
+ex:hdiDataset a dcat:Dataset ;
+    dcterms:title "Human Development Index Dataset"@en ;
+    dcterms:description "Contains the Human Development Index (HDI) data from the United Nations Development Programme (UNDP), measuring average achievement in key dimensions of human development: health (life expectancy), education (years of schooling), and standard of living (GNI per capita). Data is available for multiple countries over time."@en ;
+    dcat:theme <http://publications.europa.eu/resource/authority/data-theme/SOCI> ;  
+    dcterms:language <http://publications.europa.eu/resource/authority/language/ENG> ;
+    dcterms:accrualPeriodicity <http://publications.europa.eu/resource/authority/frequency/ANNUAL> ;
+    dcterms:publisher <https://hdr.undp.org> ; 
+    dcat:distribution ex:hdiTurtleDistribution, ex:hdiCSVDistribution ;
+    dcat:landingPage <https://hdr.undp.org/data-center/human-development-index#/indicies/HDI> .
+
+ex:hdiTurtleDistribution a dcat:Distribution ;
+    dcterms:title "Turtle format HDI data"@en ;
+    dcterms:format <http://publications.europa.eu/resource/authority/file-type/RDF_TURTLE> ;
+    dcat:mediaType "text/turtle" ;
+    dcat:accessURL <https://github.com/betse/data-on-the-web/blob/main/%20triplification/hdi-dataset/output/hdi.ttl> ;  
+    dcat:downloadURL <https://github.com/betse/data-on-the-web/blob/main/%20triplification/hdi-dataset/output/hdi.ttl> . 
+
+ex:hdiCSVDistribution a dcat:Distribution ;
+    dcterms:title "CSV format HDI data"@en ;
+    dcterms:format <http://publications.europa.eu/resource/authority/file-type/CSV> ;
+    dcat:mediaType "text/csv" ;
+    dcat:accessURL <https://hdr.undp.org/data-center/human-development-index#/indicies/HDI> ;
+    dcat:downloadURL <https://hdr.undp.org/sites/default/files/2023-24_HDR/HDR23-24_Composite_indices_complete_time_series.csv> .
+
+# VOID
+ex:hdiDataset a void:Dataset ;
+    void:dataDump <https://github.com/betse/data-on-the-web/blob/main/%20triplification/hdi-dataset/output/hdi.ttl> ;  
+    void:exampleResource <http://example.org/nswi144/hdi/hdiMeasurement_USA_2022> ;
+    dcterms:subject <http://dbpedia.org/resource/Human_Development_Index> ;
+    dcterms:source <https://hdr.undp.org/data-center/human-development-index#/indicies/HDI> ;
+    void:uriSpace "http://example.org/nswi144/hdi/" .

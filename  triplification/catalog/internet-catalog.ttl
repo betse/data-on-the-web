@@ -1,0 +1,38 @@
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix ex: <http://example.org/nswi144/> .
+
+# DCAT
+ex:internetUsageDataset a dcat:Dataset ;
+    dcterms:title "Internet Usage Statistics Dataset"@en ;
+    dcterms:description "Offers data on internet usage from the International Telecommunication Union (ITU), including indicators such as the percentage of individuals using the internet per country. This dataset reflects digital connectivity and ICT adoption across different economies."@en ;
+    dcat:theme <http://publications.europa.eu/resource/authority/data-theme/TECH> ; 
+    dcterms:language <http://publications.europa.eu/resource/authority/language/ENG> ;
+    dcterms:accrualPeriodicity <http://publications.europa.eu/resource/authority/frequency/ANNUAL> ;
+    dcterms:publisher <https://www.itu.int> ;  # ITU
+    dcat:distribution ex:internetTurtleDistribution, ex:internetCSVDistribution ;
+    dcat:landingPage <https://datahub.itu.int/data/> .
+
+ex:internetTurtleDistribution a dcat:Distribution ;
+    dcterms:title "Turtle format Internet Usage data"@en ;
+    dcterms:format <http://publications.europa.eu/resource/authority/file-type/RDF_TURTLE> ;
+    dcat:mediaType "text/turtle" ;
+    dcat:accessURL <https://github.com/betse/data-on-the-web/blob/main/%20triplification/internet-usage-dataset/output/internet-usage.ttl> ;  # Blob URL
+    dcat:downloadURL <https://github.com/betse/data-on-the-web/blob/main/%20triplification/internet-usage-dataset/output/internet-usage.ttl> . 
+
+ex:internetCSVDistribution a dcat:Distribution ;
+    dcterms:title "CSV format Internet Usage data"@en ;
+    dcterms:format <http://publications.europa.eu/resource/authority/file-type/CSV> ;
+    dcat:mediaType "text/csv" ;
+    dcat:accessURL <https://datahub.itu.int/data/> ;
+    dcat:downloadURL <https://api.datahub.itu.int/v2/data/download/byid/11624/iscollection/false> .
+
+# VOID
+ex:internetUsageDataset a void:Dataset ;
+    void:dataDump <https://github.com/betse/data-on-the-web/blob/main/%20triplification/internet-usage-dataset/output/internet-usage.ttl> ;  
+    void:exampleResource <http://example.org/nswi144/internet/internetUsageMeasurement_USA_2020> ;
+    dcterms:subject <http://dbpedia.org/resource/Internet_access> ;
+    dcterms:source <https://datahub.itu.int/data/> ;
+    void:uriSpace "http://example.org/nswi144/internet/" .

@@ -1,0 +1,38 @@
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix ex: <http://example.org/nswi144/> .
+
+# DCAT
+ex:gdpDataset a dcat:Dataset ;
+    dcterms:title "GDP by Country Dataset"@en ;
+    dcterms:description "Provides data on Gross Domestic Product (GDP) in current US dollars for various countries, sourced from the World Bank’s World Development Indicators. This dataset includes annual GDP values per country, reflecting economic output and standard of living metrics."@en ;
+    dcat:theme <http://publications.europa.eu/resource/authority/data-theme/ECON> ; 
+    dcterms:language <http://publications.europa.eu/resource/authority/language/ENG> ;
+    dcterms:accrualPeriodicity <http://publications.europa.eu/resource/authority/frequency/ANNUAL> ;
+    dcterms:publisher <https://data.worldbank.org> ;  
+    dcat:distribution ex:gdpTurtleDistribution, ex:gdpCSVDistribution ;
+    dcat:landingPage <https://data.worldbank.org/indicator/NY.GDP.MKTP.CD> .
+
+ex:gdpTurtleDistribution a dcat:Distribution ;
+    dcterms:title "Turtle format GDP data"@en ;
+    dcterms:format <http://publications.europa.eu/resource/authority/file-type/RDF_TURTLE> ;
+    dcat:mediaType "text/turtle" ;
+    dcat:accessURL <https://github.com/betse/data-on-the-web/blob/main/%20triplification/gdp-dataset/output/gdp.ttl> ; 
+    dcat:downloadURL <https://github.com/betse/data-on-the-web/blob/main/%20triplification/gdp-dataset/output/gdp.ttl> .
+
+ex:gdpCSVDistribution a dcat:Distribution ;
+    dcterms:title "CSV format GDP data"@en ;
+    dcterms:format <http://publications.europa.eu/resource/authority/file-type/CSV> ;
+    dcat:mediaType "text/csv" ;
+    dcat:accessURL <https://data.worldbank.org/indicator/NY.GDP.MKTP.CD> ;
+    dcat:downloadURL <https://api.worldbank.org/v2/en/indicator/NY.GDP.MKTP.CD?downloadformat=csv> .
+
+# VOID
+ex:gdpDataset a void:Dataset ;
+    void:dataDump <https://github.com/betse/data-on-the-web/blob/main/%20triplification/gdp-dataset/output/gdp.ttl> ;
+    void:exampleResource <http://example.org/nswi144/gdp/measurement_USA_2022> ;
+    dcterms:subject <http://dbpedia.org/resource/Gross_Domestic_Product> ;
+    dcterms:source <https://data.worldbank.org/indicator/NY.GDP.MKTP.CD> ;
+    void:uriSpace "http://example.org/nswi144/gdp/" .

@@ -1,0 +1,26 @@
+@prefix ex: <http://example.org/nswi144/hdi/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ex:region_ECA a ex:Region ;
+    ex:regionCode "ECA" .
+
+ex:region_AS a ex:Region ;
+    ex:regionCode "AS" .
+
+ex:country_DZA a ex:Country ;
+    ex:countryName "Algeria" ;
+    ex:countryCode "DZA" ;
+    ex:locatedIn ex:region_AS .
+
+ex:country_ALB a ex:Country ;
+    ex:countryName "Albania" ;
+    ex:countryCode "ALB" ;
+    ex:locatedIn ex:region_ECA .
+
+ex:hdiMeasurement_1 a ex:HDIMeasurement ;
+    ex:year "1990"^^xsd:gYear ;
+    ex:hdiValue "0.593"^^xsd:decimal .
+
+ex:hdiMeasurement_2 a ex:HDIMeasurement ;
+    ex:year "1990"^^xsd:gYear ;
+    ex:hdiValue "0.649"^^xsd:decimal .

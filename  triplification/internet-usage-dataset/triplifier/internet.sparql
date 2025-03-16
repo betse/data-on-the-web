@@ -1,0 +1,41 @@
+PREFIX ex: <http://example.org/nswi144/internet/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX qb: <http://purl.org/linked-data/cube#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX dct: <http://purl.org/dc/terms/>
+
+CONSTRUCT {
+    ?countryIRI a ex:Country ;
+        ex:countryName ?entityName ;
+        ex:countryCode ?entityIso ;
+        dct:identifier ?entityID .
+
+    ?seriesIRI a ex:InternetUsageSeries ;
+        skos:notation ?seriesCode ;  
+        dct:identifier ?seriesID ;
+        dct:title ?seriesName ;
+        dct:description ?seriesDescription ;
+        ex:seriesUnits ?seriesUnits ;
+        ex:seriesParent ?seriesParent ;
+        dct:source ?dataSource .
+
+    ?measurementIRI a qb:Observation ;
+        qb:dataSet ex:internetUsageDataset ; 
+        ex:year ?yearTyped ;
+        ex:dataValue ?dataValueTyped ;
+        qb:measureType ?seriesIRI ;
+        ex:refCountry ?countryIRI .
+}
+WHERE {
+    #BIND(URI(CONCAT("http://example.org/nswi144/internet/country_", ?entityName)) AS ?countryIRI)
+    BIND(URI(CONCAT("http://example.org/nswi144/internet/country_", ?entityIso)) AS ?countryIRI)
+    BIND(URI(CONCAT("http://example.org/nswi144/internet/internetUsageSeries_", ?seriesID)) AS ?seriesIRI)
+    BIND(URI(CONCAT("http://example.org/nswi144/internet/internetUsageMeasurement_", ?entityIso, "_", ?dataYear)) AS ?measurementIRI)
+
+    BIND(STRDT(?dataYear, xsd:gYear) AS ?yearTyped)
+    BIND(STRDT(?dataValue, xsd:decimal) AS ?dataValueTyped)
+
+    # Filter out invalid or empty values
+    FILTER(?dataValue != "" && REGEX(?dataYear, "^[0-9]{4}$"))
+}
+

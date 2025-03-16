@@ -1,0 +1,22 @@
+@prefix ex: <http://example.org/nswi144/gdp/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ex:country_DZA a ex:Country ;
+    ex:countryName "Algeria" ;
+    ex:countryCode "DZA" .
+
+ex:country_IND a ex:Country ;
+    ex:countryName "India" ;
+    ex:countryCode "IND" .
+
+ex:gdpIndicator a ex:GDPIndicator ;
+    ex:indicatorName "GDP (current US$)" ;
+    ex:indicatorCode "NY.GDP.MKTP.CD" .
+
+ex:gdpMeasurement_1 a ex:GDPMeasurement ;
+    ex:year "2020"^^xsd:gYear ;
+    ex:gdpValue "164873415325.201"^^xsd:decimal .
+
+ex:gdpMeasurement_2 a ex:GDPMeasurement ;
+    ex:year "2020"^^xsd:gYear ;
+    ex:gdpValue "2674851578587.27"^^xsd:decimal .

@@ -2,15 +2,15 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 ex:country_DZA a ex:Country ;
-    ex:countryName "Algeria" ;
+    ex:countryName "Algeria"@en ;
     ex:countryCode "DZA" .
 
 ex:country_IND a ex:Country ;
-    ex:countryName "India" ;
+    ex:countryName "India"@en ;
     ex:countryCode "IND" .
 
 ex:gdpIndicator a ex:GDPIndicator ;
-    ex:indicatorName "GDP (current US$)" ;
+    ex:indicatorName "GDP (current US$)"@en ;
     ex:indicatorCode "NY.GDP.MKTP.CD" .
 
 ex:gdpMeasurement_1 a ex:GDPMeasurement ;

@@ -2,15 +2,15 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 ex:country_ABW a ex:Country ;
-    ex:countryName "Aruba" ;
+    ex:countryName "Aruba"@en ;
     ex:countryCode "ABW" .
 
 ex:internetUsageSeries_1 a ex:InternetUsageSeries ;
     ex:seriesID "11624" ;
     ex:seriesCode "i99H" ;
-    ex:seriesName "Individuals using the Internet" ;
+    ex:seriesName "Individuals using the Internet"@en ;
     ex:seriesUnits "%" ;
-    ex:seriesDescription "Refers to the proportion of individuals who used the Internet from any location in the last three months. Access can be via a fixed or mobile network." .
+    ex:seriesDescription "Refers to the proportion of individuals who used the Internet from any location in the last three months. Access can be via a fixed or mobile network."@en .
 
 ex:internetUsageMeasurement_1 a ex:InternetUsageMeasurement ;
     ex:year "2000"^^xsd:gYear ;

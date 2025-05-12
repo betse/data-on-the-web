@@ -1,29 +1,33 @@
-PREFIX ex: <http://example.org/nswi144/gdp/>
-PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-PREFIX qb: <http://purl.org/linked-data/cube#>
-PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX ex:    <http://example.org/nswi144/>
+PREFIX xsd:   <http://www.w3.org/2001/XMLSchema#>
+PREFIX qb:    <http://purl.org/linked-data/cube#>
+PREFIX skos:  <http://www.w3.org/2004/02/skos/core#>
 
 CONSTRUCT {
-    ?countryIRI a ex:Country ;
-        skos:prefLabel ?Country_Name ;
-        ex:countryCode ?Country_Code .
-    
-    ?indicatorIRI a ex:GDPIndicator, skos:Concept ;
-        skos:prefLabel ?Indicator_Name ;
-        skos:notation ?Indicator_Code .
-    
-    ?measurementIRI a qb:Observation ;
-        qb:dataSet ex:gdpDataset ;
-        ex:year ?yearTyped ;
-        ex:gdpValue ?gdpValueTyped ;
-        ex:refCountry ?countryIRI ;
-        qb:measureType ?indicatorIRI .
+  ?countryIRI a  ex:Country ;
+    skos:prefLabel  ?Country_NameEn ;
+    ex:countryCode  ?Country_Code .
+
+  ?indicatorIRI a ex:GDPIndicator, skos:Concept ;
+    skos:prefLabel  ?Indicator_NameEn ;
+    skos:notation   ?Indicator_Code .
+
+  ?obs a  qb:Observation ;
+    qb:dataSet      ex:gdpDataset ;
+    ex:year         ?yearG ;
+    ex:gdpValue     ?gdpDec ;
+    ex:refCountry   ?countryIRI ;
+    qb:measureType  ?indicatorIRI .
 }
 WHERE {
-    BIND(IRI(CONCAT("http://example.org/nswi144/gdp/country_", ?Country_Code)) AS ?countryIRI)
-    BIND(IRI(CONCAT("http://example.org/nswi144/gdp/indicator_", ?Indicator_Code)) AS ?indicatorIRI)
-    BIND(IRI(CONCAT("http://example.org/nswi144/gdp/measurement_", ?Country_Code, "_", ?year)) AS ?measurementIRI)
-    
-    BIND(STRDT(?year, xsd:gYear) AS ?yearTyped)
-    BIND(STRDT(?gdpValue, xsd:decimal) AS ?gdpValueTyped)
+  BIND( IRI(CONCAT("http://example.org/nswi144/country/", ?Country_Code)) AS ?countryIRI)
+  BIND( IRI(CONCAT("http://example.org/nswi144/indicator/", ?Indicator_Code)) AS ?indicatorIRI)
+  BIND( IRI(CONCAT("http://example.org/nswi144/observation/", ?Country_Code, "/", STR(?year))) AS ?obs)
+
+  BIND( xsd:gYear( ?year )      AS ?yearG )
+  BIND( xsd:decimal( ?gdpValue ) AS ?gdpDec )
+
+  # attach English language tags
+  BIND( STRLANG( ?Country_Name,   "en" ) AS ?Country_NameEn )
+  BIND( STRLANG( ?Indicator_Name, "en" ) AS ?Indicator_NameEn )
 }

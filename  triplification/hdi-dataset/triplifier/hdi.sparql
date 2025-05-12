@@ -1,38 +1,46 @@
-PREFIX ex: <http://example.org/nswi144/hdi/>
-PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
-PREFIX qb: <http://purl.org/linked-data/cube#>
+# hdi.sparql
+PREFIX ex:    <http://example.org/nswi144/>
+PREFIX xsd:   <http://www.w3.org/2001/XMLSchema#>
+PREFIX skos:  <http://www.w3.org/2004/02/skos/core#>
+PREFIX qb:    <http://purl.org/linked-data/cube#>
 
 CONSTRUCT {
-    ?regionIRI a skos:Concept, ex:Region ;
-        skos:notation ?region .
+  ?regionIRI a skos:Concept, ex:Region ;
+    skos:notation   ?regionCode ;
+    skos:prefLabel  ?regionLabel .
 
-    ?countryIRI a ex:Country ;
-        ex:countryName ?country ;
-        ex:countryCode ?iso3 ;
-        ex:locatedIn ?regionIRI .
+  ?countryIRI a ex:Country ;
+    skos:prefLabel  ?countryEn ;
+    ex:countryCode  ?iso3 ;
+    ex:locatedIn    ?regionIRI .
 
-    ?measurementIRI a qb:Observation ;
-        qb:dataSet ex:hdiDataset ;
-        ex:year ?yearTyped ;
-        ex:hdiValue ?hdiValueTyped ;
-        ex:refCountry ?countryIRI ;
-        ex:hdiRank ?hdiRankTyped .
+  ?obs a qb:Observation ;
+    qb:dataSet ex:hdiDataset ;
+    ex:year ?yearG ;
+    ex:hdiValue ?hdiDec ;
+    ex:refCountry ?countryIRI ;
+    ex:hdiRank ?hdiRankInt .
 }
 WHERE {
-    BIND(IRI(CONCAT("http://example.org/nswi144/hdi/region_", ?region)) AS ?regionIRI)
-    BIND(IRI(CONCAT("http://example.org/nswi144/hdi/country_", ?iso3)) AS ?countryIRI)
-    BIND(IRI(CONCAT("http://example.org/nswi144/hdi/hdiMeasurement_", ?iso3, "_", ?year)) AS ?measurementIRI)
-    
-    BIND(STRDT(?year, xsd:gYear) AS ?yearTyped)
-    BIND(STRDT(?hdiValue, xsd:decimal) AS ?hdiValueTyped)
-    
-    # Optionally bind hdiRank only if the year is "2022"
+  BIND( IRI(CONCAT("http://example.org/nswi144/region/",  ?region))     AS ?regionIRI )
+  BIND( IRI(CONCAT("http://example.org/nswi144/country/", ?iso3))       AS ?countryIRI )
+  BIND( IRI(CONCAT("http://example.org/nswi144/observation/hdi/",
+                   ?iso3, "/", STR(?year)))                           AS ?obs )
+
+  BIND( xsd:gYear( ?year )       AS ?yearG )
+  BIND( xsd:decimal( ?hdiValue ) AS ?hdiDec )
+
+
+  # labels
+  BIND( STRLANG( ?region,  "en" ) AS ?regionLabel )
+  BIND( STRLANG( ?country, "en" ) AS ?countryEn )
+  
+  # Optionally bind hdiRank only if the year is "2022"
     OPTIONAL {
         FILTER(?year = "2022")
         BIND(STRDT(?hdi_rank_2022, xsd:integer) AS ?hdiRankTyped)
     }
-    
-    # Filter out rows with empty HDI values or invalid year formats
+
+  # Filter out rows with empty HDI values or invalid year formats
     FILTER(?hdiValue != "" && REGEX(?year, "^[0-9]{4}$"))
 }

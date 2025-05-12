@@ -8,12 +8,12 @@ ex:region_AS a ex:Region ;
     ex:regionCode "AS" .
 
 ex:country_DZA a ex:Country ;
-    ex:countryName "Algeria" ;
+    ex:countryName "Algeria"@en ;
     ex:countryCode "DZA" ;
     ex:locatedIn ex:region_AS .
 
 ex:country_ALB a ex:Country ;
-    ex:countryName "Albania" ;
+    ex:countryName "Albania"@en ;
     ex:countryCode "ALB" ;
     ex:locatedIn ex:region_ECA .
 

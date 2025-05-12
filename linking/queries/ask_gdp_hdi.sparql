@@ -1,0 +1,26 @@
+PREFIX ex: <http://example.org/nswi144/>
+PREFIX qb: <http://purl.org/linked-data/cube#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+
+# If there is a GDP and HDI observation for Algeria (country code "DZA") in the dataset.
+ASK {
+    ?country ex:countryCode "DZA" .
+
+    ?gdpObs a qb:Observation ;
+            qb:dataSet ex:gdpDataset ;
+            ex:refCountry ?country ;
+            ex:year "2020"^^xsd:gYear ;
+            ex:gdpValue ?gdpValue .
+
+    ?hdiObs a qb:Observation ;
+            qb:dataSet ex:hdiDataset ;
+            ex:refCountry ?linkedCountry ;
+            ex:year "2020"^^xsd:gYear ;
+            ex:hdiValue ?hdiValue .
+
+    ?gdpObs <http://www.w3.org/2002/07/owl#sameAs> ?hdiObs .
+
+    BIND(IF(BOUND(?gdpValue) && BOUND(?hdiValue), true, false) AS ?hasData)
+    FILTER(?hasData = true)
+}

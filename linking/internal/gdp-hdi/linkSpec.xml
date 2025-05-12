@@ -1,0 +1,53 @@
+<Interlink id="gdphdi_33b7504a6d9df2d1" linkLimit="1000000" matchingExecutionTimeout="3600">
+  <MetaData>
+    <Label>gdp-hdi</Label>
+    <Description xml:space="preserve"><![CDATA[]]></Description>
+    <Modified>2025-05-09T19:03:46.413128Z</Modified>
+    <Created>2025-05-09T18:52:15.483369Z</Created>
+    <Tags> </Tags>
+  </MetaData>
+  <SourceDataset dataSource="gdpSource_6e0b2944253bdea5" var="a" typeUri="http://purl.org/linked-data/cube#Observation">
+    <RestrictTo xml:space="preserve">
+          
+        </RestrictTo>
+  </SourceDataset>
+  <TargetDataset dataSource="hidSource_1c88404999655d1c" var="b" typeUri="http://purl.org/linked-data/cube#Observation">
+    <RestrictTo xml:space="preserve">
+          
+        </RestrictTo>
+  </TargetDataset>
+  <LinkageRule linkType="&lt;http://www.w3.org/2002/07/owl#sameAs&gt;">
+    <Aggregate id="min" weight="1" type="min">
+      <Compare id="levenshteinDistance_2" weight="1" metric="levenshteinDistance" threshold="0.0" indexing="true">
+        <Input id="sourcePathInput_2" path="&lt;http://example.org/nswi144/year&gt;"/>
+        <Input id="targetPathInput_2" path="&lt;http://example.org/nswi144/year&gt;"/>
+        <Param name="minChar" xml:space="preserve"><![CDATA[0]]></Param>
+        <Param name="maxChar" xml:space="preserve"><![CDATA[z]]></Param>
+      </Compare>
+      <Compare id="levenshteinDistance" weight="1" metric="levenshteinDistance" threshold="0.0" indexing="true">
+        <Input id="sourcePathInput" path="&lt;http://example.org/nswi144/refCountry&gt;"/>
+        <Input id="targetPathInput" path="&lt;http://example.org/nswi144/refCountry&gt;"/>
+        <Param name="minChar" xml:space="preserve"><![CDATA[0]]></Param>
+        <Param name="maxChar" xml:space="preserve"><![CDATA[z]]></Param>
+      </Compare>
+    </Aggregate>
+    <Filter/>
+    <RuleLayout>
+      <NodePositions>
+        <NodePos id="targetPathInput" x="-180" y="105"/>
+        <NodePos id="sourcePathInput" x="-180" y="-135"/>
+        <NodePos id="levenshteinDistance_2" x="480" y="630"/>
+        <NodePos id="min" x="915" y="285"/>
+        <NodePos id="targetPathInput_2" x="-285" y="735"/>
+        <NodePos id="sourcePathInput_2" x="-180" y="480"/>
+        <NodePos id="levenshteinDistance" x="450" y="-75"/>
+      </NodePositions>
+    </RuleLayout>
+    <UiAnnotations>
+      <StickyNotes> </StickyNotes>
+    </UiAnnotations>
+  </LinkageRule>
+  <Outputs>
+    <Output id="output_8a538c48c5c59994"></Output>
+  </Outputs>
+</Interlink>

@@ -1,0 +1,20 @@
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix ex: <http://example.org/nswi144/> .
+
+ex:gdpHdiLinkset a void:Linkset ;
+    void:Target ex:gdpDataset ;
+    void:Target ex:hdiDataset ;
+    void:linkPredicate <http://www.w3.org/2002/07/owl#sameAs> ;
+    dcterms:title "Linkset between GDP and HDI Datasets"@en ;
+    dcterms:description "Links countries between GDP and HDI datasets based on country and year"@en ;
+    void:triples "5745" ;
+    void:exampleResource <http://example.org/nswi144/gdp/country_DZA> .
+
+ex:gdpDataset a void:Dataset ;
+    dcterms:title "GDP by Country Dataset"@en ;
+   void:dataDump <https://github.com/betse/data-on-the-web/blob/main/%20triplification/gdp-dataset/output/gdp.ttl> .
+
+ex:hdiDataset a void:Dataset ;
+    dcterms:title "HDI by Country Dataset"@en ;
+    void:dataDump <https://github.com/betse/data-on-the-web/blob/main/%20triplification/hdi-dataset/output/hdi.ttl> .  

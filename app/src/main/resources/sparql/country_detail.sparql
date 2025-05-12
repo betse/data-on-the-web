@@ -1,0 +1,36 @@
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX ex: <http://example.org/nswi144/>
+PREFIX qb: <http://purl.org/linked-data/cube#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+SELECT ?countryName ?gdpValue ?hdiValue ?internetUsage ?year
+WHERE {
+    # Retrieve country details
+    ?country ex:countryCode ?code ;
+             skos:prefLabel ?countryName .
+    FILTER(?code = "POL" && ?year = "2020"^^xsd:gYear)
+
+    # Retrieve GDP data for 2020
+    ?gdpObs a qb:Observation ;
+            qb:dataSet ex:gdpDataset ;
+            ex:refCountry ?country ;
+            ex:year ?year;
+            ex:gdpValue ?gdpValue .
+
+    # Retrieve HDI data for 2020, if available
+    OPTIONAL {
+        ?hdiObs a qb:Observation ;
+                qb:dataSet ex:hdiDataset ;
+                ex:refCountry ?country ;
+                ex:year ?year ;
+                ex:hdiValue ?hdiValue .
+    }
+    # Retrieve internet usage data for 2020, if available
+    OPTIONAL {
+        ?internetObs a qb:Observation ;
+                     qb:dataSet ex:internetUsageDataset ;
+                     ex:refCountry ?country ;
+                     ex:year ?year ;
+                     ex:dataValue ?internetUsage .
+    }
+}

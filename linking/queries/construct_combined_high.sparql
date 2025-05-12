@@ -1,0 +1,40 @@
+PREFIX ex: <http://example.org/nswi144/>
+PREFIX qb: <http://purl.org/linked-data/cube#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+
+CONSTRUCT {
+    ?country   ex:countryCode ?countryCode ;
+               ex:hasCombinedData ?newObs .
+    ?newObs skos:prefLabel ?countryLabel ;
+            ex:year ?year ;
+            ex:gdpValue ?gdpValue ;
+            ex:hdiValue ?hdiValue .
+}
+WHERE {
+    VALUES ?year { "2019"^^xsd:gYear "2020"^^xsd:gYear }
+
+    # GDP data
+    ?gdpObs a qb:Observation ;
+            qb:dataSet ex:gdpDataset ;
+            ex:refCountry ?country ;
+            ex:year ?year ;
+            ex:gdpValue ?gdpValue .
+
+    # HDI data
+    ?hdiObs a qb:Observation ;
+            qb:dataSet ex:hdiDataset ;
+            ex:refCountry ?country ;
+            ex:year ?year ;
+            ex:hdiValue ?hdiValue .
+
+    # Use linkset to join countries
+    ?gdpObs owl:sameAs ?hdiObs .
+
+  	?country skos:prefLabel ?countryLabel .
+    ?country ex:countryCode ?countryCode .
+
+    # Create new observation IRI
+  BIND(IRI(CONCAT("http://example.org/nswi144/combined/", STR(?year),"_" ,STR(?countryCode))) AS ?newObs)
+}

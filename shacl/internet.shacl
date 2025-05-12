@@ -1,0 +1,113 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix ex: <http://example.org/nswi144/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix qb: <http://purl.org/linked-data/cube#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+
+# Node shape
+# Validates resources of type ex:Country 
+ex:CountryShapeInternet a sh:NodeShape ;
+  sh:targetClass ex:Country ;
+  sh:severity sh:Violation ; # Critical issue if a country is not valid
+  sh:message "Node is not a valid Country" ;
+  sh:property ex:CountryCodePropertyShapeInternet ; # Uses the defined property shape for country code
+  sh:property [ # Also check for the presence of the preferred label
+    sh:path skos:prefLabel ;
+    sh:minCount 1 ;
+    sh:message "Every Country must have at least one skos:prefLabel ." ;
+    sh:severity sh:Violation ;
+  ] ;
+   sh:property [ # Check for the presence of the dct:identifier
+    sh:path dct:identifier ;
+    sh:minCount 1 ;
+    sh:message "Every Country must have a dct:identifier ." ;
+    sh:severity sh:Violation ;
+  ] .
+
+# Property shape used by a node shape (and standalone constraints)
+# Defines constraints for the ex:countryCode property.
+ex:CountryCodePropertyShapeInternet a sh:PropertyShape ;
+  sh:path ex:countryCode ;
+  sh:message "The ex:countryCode property has issues ." ;
+  sh:severity sh:Violation ;
+  sh:datatype xsd:string ; # Value type constraint
+  sh:minCount 1 ; # Cardinality constraint (minimum)
+  sh:maxCount 1 ; # Cardinality constraint (maximum)
+  sh:pattern "^[A-Z]{3}$" ; # String-based constraint (exactly 3 uppercase letters)
+  sh:message "Country code must be a string of exactly 3 uppercase letters and must be present ." ;
+  sh:name "country code property" .
+
+# Node shape for validating Internet Usage Series concepts
+ex:InternetUsageSeriesShape a sh:NodeShape ;
+  sh:targetClass ex:InternetUsageSeries ;
+  sh:severity sh:Violation ; 
+  sh:message "Node is not a valid Internet Usage Series concept." ;
+  sh:property [
+    sh:path skos:notation ;
+    sh:minCount 1 ;
+    sh:datatype xsd:string ; # Notation should be a string
+    sh:message "Internet Usage Series must have a skos:notation which is a string." ;
+    sh:severity sh:Violation ;
+  ] ;
+  sh:property [
+    sh:path dct:title ;
+    sh:minCount 1 ;
+    sh:message "Internet Usage Series must have a dct:title." ;
+    sh:severity sh:Violation ;
+  ] ;
+   sh:property [
+    sh:path ex:seriesUnits ;
+    sh:minCount 1 ;
+    sh:message "Internet Usage Series must have ex:seriesUnits." ;
+    sh:severity sh:Violation ;
+  ] .
+
+
+# Node shape for validating Internet Usage Observations
+ex:InternetObservationShape a sh:NodeShape ;
+  sh:targetClass qb:Observation ;
+  sh:severity sh:Violation ; # Critical issue if an observation is not valid
+  sh:message "Node is not a valid Internet Usage Observation." ;
+  sh:property [
+    sh:path qb:dataSet ;
+    sh:hasValue ex:internetUsageDataset ; # Ensure it belongs to the correct dataset
+    sh:message "Internet Usage Observation must belong to the ex:internetUsageDataset." ;
+    sh:severity sh:Violation ;
+  ] ;
+  sh:property [
+    sh:path ex:year ;
+    sh:minCount 1 ;
+    sh:datatype xsd:gYear ; # Value type constraint (year)
+    sh:message "Internet Usage Observation must have an ex:year property with datatype xsd:gYear." ;
+    sh:severity sh:Violation ;
+  ] ;
+  sh:property [
+    sh:path ex:dataValue ;
+    sh:minCount 1 ; # Cardinality constraint (data value must be present)
+    sh:message "Internet Usage Observation must have an ex:dataValue." ;
+    sh:severity sh:Violation ;
+  ] ;
+  sh:property [
+    sh:path ex:refCountry ;
+    sh:minCount 1 ; # Must reference a country
+    sh:node ex:CountryShapeInternet ; # Shape-based constraint (referenced country must be valid)
+    sh:message "Internet Usage Observation must reference a valid Country." ;
+    sh:severity sh:Violation ;
+  ] .
+
+
+# Value range constraint (and Value type constraint)
+# Validates that the ex:dataValue property of a qb:Observation is a decimal and non-negative.
+ex:DataValueRangeShapeInternet a sh:NodeShape ;
+  sh:targetClass qb:Observation ;
+  sh:severity sh:Violation ;
+  sh:message "Internet usage data value is not a valid non-negative decimal." ;
+  sh:property [
+    sh:path ex:dataValue ;
+    sh:datatype xsd:decimal ; # Value type constraint (decimal)
+    sh:minInclusive 0.0 ; # Value range constraint (must be 0 or greater)
+    sh:message "The Internet usage data value must be a non-negative decimal." ;
+  ] .

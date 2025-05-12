@@ -1,0 +1,69 @@
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX ex: <http://example.org/nswi144/>
+PREFIX qb: <http://purl.org/linked-data/cube#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+CONSTRUCT {
+    ?country ex:hasRanking ?ranking ;
+    		 ex:countryCode ?countryCode ;
+             skos:prefLabel ?countryLabel .
+    ?ranking ex:year "2020"^^xsd:gYear ;
+             ex:gdpRank ?gdpRank ;
+             ex:hdiRank ?hdiRank ;
+             ex:combinedScore ?combinedScore ;
+  			 skos:prefLabel ?countryLabel .
+}
+WHERE {
+    # Subquery to rank by GDP
+    {
+        SELECT ?country (COUNT(?higherGdp) + 1 AS ?gdpRank)
+        WHERE {
+            ?gdpObs a qb:Observation ;
+                    qb:dataSet ex:gdpDataset ;
+                    ex:refCountry ?country ;
+                    ex:year "2020"^^xsd:gYear ;
+                    ex:gdpValue ?gdpValue .
+
+            ?otherGdpObs a qb:Observation ;
+                         qb:dataSet ex:gdpDataset ;
+                         ex:refCountry ?otherCountry ;
+                         ex:year "2020"^^xsd:gYear ;
+                         ex:gdpValue ?otherGdpValue .
+            FILTER(?otherGdpValue > ?gdpValue)
+            BIND(?otherCountry AS ?higherGdp)
+        }
+        GROUP BY ?country
+    }
+
+    # Subquery to rank by HDI
+    {
+        SELECT ?country (COUNT(?higherHdi) + 1 AS ?hdiRank)
+        WHERE {
+            ?hdiObs a qb:Observation ;
+                    qb:dataSet ex:hdiDataset ;
+                    ex:refCountry ?country ;
+                    ex:year "2020"^^xsd:gYear ;
+                    ex:hdiValue ?hdiValue .
+
+            ?otherHdiObs a qb:Observation ;
+                         qb:dataSet ex:hdiDataset ;
+                         ex:refCountry ?otherCountry ;
+                         ex:year "2020"^^xsd:gYear ;
+                         ex:hdiValue ?otherHdiValue .
+            FILTER(?otherHdiValue > ?hdiValue)
+            BIND(?otherCountry AS ?higherHdi)
+        }
+        GROUP BY ?country
+    }
+
+
+    ?gdpObs <http://www.w3.org/2002/07/owl#sameAs> ?hdiObs .
+    
+  ?country ex:countryCode ?countryCode .
+  ?country skos:prefLabel ?countryLabel .
+
+    BIND((?gdpRank + ?hdiRank) / 2 AS ?combinedScore)
+
+    # Create a new ranking resource
+    BIND(IRI(CONCAT("http://example.org/nswi144/ranking/", STR(?countryCode), "_2020")) AS ?ranking)
+}

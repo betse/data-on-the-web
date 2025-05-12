@@ -1,0 +1,168 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix ex: <http://example.org/nswi144/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix qb: <http://purl.org/linked-data/cube#> .
+
+# Validates resources of type ex:Country.
+ex:CountryShapeHDI a sh:NodeShape ;
+  sh:targetClass ex:Country ;
+  sh:severity sh:Violation ;
+  sh:message "Node is not a valid Country " ;
+  sh:property ex:CountryCodePropertyShapeHDI ;
+  sh:property [
+    sh:path skos:prefLabel ;
+    sh:minCount 1 ;
+    sh:message "Every Country must have at least one skos:prefLabel " ;
+    sh:severity sh:Violation ;
+  ] .
+
+# Defines constraints for the ex:countryCode property.
+ex:CountryCodePropertyShapeHDI a sh:PropertyShape ;
+  sh:path ex:countryCode ;
+  sh:message "The ex:countryCode property has issues " ;
+  sh:severity sh:Violation ;
+  sh:datatype xsd:string ;
+  sh:minCount 1 ;
+  sh:maxCount 1 ;
+  sh:pattern "^[A-Z]{3}$" ;
+  sh:message "Country code must be a string of exactly 3 uppercase letters and must be present." ;
+  sh:name "country code property (HDI context)" .
+
+# Validates that the ex:year property of qb:Observation is of type xsd:gYear.
+ex:ObservationYearShapeHDI a sh:NodeShape ;
+  sh:targetClass qb:Observation ;
+  sh:severity sh:Violation ;
+  sh:message "Observation year is not a valid Gregorian Year " ;
+  sh:property [
+    sh:path ex:year ;
+    sh:datatype xsd:gYear ;
+    sh:minCount 1 ;
+    sh:message "Observation must have an ex:year property with datatype xsd:gYear " ;
+  ] .
+
+# Validates that each qb:Observation has exactly one ex:refCountry.
+ex:RefCountryCardinalityShapeHDI a sh:NodeShape ;
+  sh:targetClass qb:Observation ;
+  sh:severity sh:Violation ;
+  sh:message "Observation must reference exactly one country." ;
+  sh:property [
+    sh:path ex:refCountry ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:message "An observation must have exactly one ex:refCountry." ;
+  ] .
+
+# Validates that a Country resource must have both an ex:countryCode and a skos:prefLabel.
+ex:CountryRequiredPropertiesShapeHDI a sh:NodeShape ;
+  sh:targetClass ex:Country ;
+  sh:severity sh:Violation ;
+  sh:message "Country must have both a country code and a preferred label " ;
+  sh:and (
+    [ sh:path ex:countryCode ; sh:minCount 1 ; sh:message "Missing country code " ]
+    [ sh:path skos:prefLabel ; sh:minCount 1 ; sh:message "Missing preferred label " ]
+  ) .
+
+# Validates that the object of the ex:refCountry property on a qb:Observation conforms to the CountryShape.
+ex:ObservationRefCountryShapeHDI a sh:NodeShape ;
+  sh:targetClass qb:Observation ;
+  sh:severity sh:Violation ;
+  sh:message "The referenced country does not conform to the CountryShape." ;
+  sh:property [
+    sh:path ex:refCountry ;
+    sh:node ex:CountryShapeHDI ;
+    sh:message "The resource referenced by ex:refCountry must be a valid Country " ;
+  ] .
+
+# Validates that a Region resource has a skos:prefLabel and notation.
+ex:RegionShapeHDI a sh:NodeShape ;
+  sh:targetClass ex:Region ;
+  sh:severity sh:Info ;
+  sh:message "Region should have a preferred label and notation" ;
+  sh:property [
+    sh:path skos:prefLabel ;
+    sh:minCount 1 ;
+    sh:message "Every Region should ideally have a skos:prefLabel " ;
+  ] ;
+   sh:property [
+    sh:path skos:notation ;
+    sh:minCount 1 ;
+    sh:message "Every Region should ideally have a skos:notation " ;
+  ] .
+
+# Validates resources of type qb:Observation.
+ex:HdiObservationShape a sh:NodeShape ;
+  sh:targetClass qb:Observation ;
+  sh:severity sh:Violation ;
+  sh:message "Node is not a valid HDI Observation." ;
+  sh:property [
+    sh:path qb:dataSet ;
+    sh:hasValue ex:hdiDataset ; # Ensure it belongs to the HDI dataset
+    sh:message "HDI Observation must belong to the ex:hdiDataset." ;
+    sh:severity sh:Violation ;
+  ] ;
+  sh:property [
+    sh:path ex:hdiValue ;
+    sh:minCount 1 ; # HDI value must be present
+    sh:message "HDI Observation must have an ex:hdiValue." ;
+    sh:severity sh:Violation ;
+  ] ;
+   sh:property [
+    sh:path ex:hdiRank ;
+    sh:minCount 1 ; # HDI rank must be present based on your query logic
+    sh:message "HDI Observation must have an ex:hdiRank." ;
+    sh:severity sh:Violation ;
+  ] .
+
+
+# Value range constraint 
+# Validates that the ex:hdiValue property of qb:Observation is within a valid range (0.0 to 1.0).
+ex:HdiValueRangeShapeHDI a sh:NodeShape ;
+  sh:targetClass qb:Observation ;
+  sh:severity sh:Violation ;
+  sh:message "HDI value is out of the valid range (0.0 to 1.0) " ;
+  sh:property [
+    sh:path ex:hdiValue ;
+    sh:minInclusive 0.0 ;
+    sh:maxInclusive 1.0 ;
+    sh:datatype xsd:decimal ; # Ensure it's a decimal
+    sh:message "The HDI value must be a decimal between 0.0 and 1.0 inclusive " ;
+  ] .
+
+# String-based constraint
+# Validates that the skos:notation for a Region is a string.
+ex:RegionNotationShapeHDI a sh:NodeShape ;
+  sh:targetClass ex:Region ;
+  sh:severity sh:Warning ;
+  sh:message "Region notation should be a string " ;
+  sh:property [
+    sh:path skos:notation ;
+    sh:datatype xsd:string ;
+    sh:message "The region notation should have datatype xsd:string " ;
+  ] .
+
+
+# Validates that a Country is located in a Region.
+ex:CountryLocatedInRegionShape a sh:NodeShape ;
+  sh:targetClass ex:Country ;
+  sh:severity sh:Violation ;
+  sh:message "Country must be located in a Region." ;
+  sh:property [
+    sh:path ex:locatedIn ;
+    sh:class ex:Region ; # The object of ex:locatedIn must be a Region
+    sh:minCount 1 ; # Country must be located in at least one region
+    sh:message "Every Country must be linked to an ex:Region via ex:locatedIn." ;
+  ] .
+
+# Validates that the ex:hdiRank property is an integer.
+ex:HdiRankTypeShape a sh:NodeShape ;
+  sh:targetClass qb:Observation ;
+  sh:severity sh:Violation ;
+  sh:message "HDI rank is not a valid integer." ;
+  sh:property [
+    sh:path ex:hdiRank ;
+    sh:datatype xsd:integer ; # HDI rank must be an integer
+    sh:message "The ex:hdiRank must have datatype xsd:integer." ;
+  ] .

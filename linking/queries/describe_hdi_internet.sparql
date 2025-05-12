@@ -1,0 +1,22 @@
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX ex:   <http://example.org/nswi144/>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX qb:   <http://purl.org/linked-data/cube#>
+PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>
+
+DESCRIBE ?countryIRI ?hObs ?internetObs
+WHERE {
+  ?countryIRI ex:countryCode "IND" .
+  # HDI observation
+  ?hObs a  qb:Observation ;
+        qb:dataSet   ex:hdiDataset ;
+        ex:refCountry ?countryIRI .
+  
+	# Internet usage Observation
+   ?internetObs a qb:Observation ;
+                 qb:dataSet ex:internetUsageDataset ;
+                 ex:refCountry ?linkedCountry .
+
+  ?hObs owl:sameAs ?internetObs .
+  
+}

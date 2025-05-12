@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <title>Semestral Project Presentation</title>
+    <style>
+        body { font-family: 'Poppins',Arial, sans-serif; margin: 0; padding: 40px; background-color: #f0f0f0; }
+        .slide { background-color: white; padding: 20px; margin-bottom: 20px; border-radius: 5px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h1 { color: #333; }
+        h2 { color: #555; }
+        img { max-width: 100%; height: auto; }
+        ul { list-style-type: disc; padding-left: 20px; }
+    </style>
+</head>
+<body>
+    <div class="slide">
+        <h1>Semestral Project Presentation</h1>
+        <p>Presented by: Betsegaw Gebreyohannes<br>Date: May 12, 2025</p>
+    </div>
+
+    <div class="slide">
+        <h2>Data Sources</h2>
+        <ul>
+            <li><strong>GDP:</strong> World Bank World Development Indicators (<a href="https://data.worldbank.org/indicator/NY.GDP.MKTP.CD">https://data.worldbank.org</a>)</li>
+            <img src="gdp-dataset.png" alt="Home Page Screenshot">
+            <li><strong>HDI:</strong> UN Development Programme (<a href="https://hdr.undp.org/data-center/human-development-index">https://hdr.undp.org</a>)</li>
+            <img src="hdi-dataset.png" alt="Home Page Screenshot">
+            <li><strong>Internet Usage:</strong> International Telecommunication Union (<a href="https://datahub.itu.int/data/">https://datahub.itu.int</a>)</li>
+            <img src="internet-usage-dataset.png" alt="Home Page Screenshot">
+        </ul>
+    </div>
+
+    <div class="slide">
+        <h2>Tools and Triplification Process</h2>
+        <ul>
+            <li><strong>TARQL:</strong> Used to transform CSV data into RDF Turtle format with SPARQL CONSTRUCT queries.</li>
+            <li><strong>Silk:</strong> Employed for link discovery, creating linksets between datasets.</li>
+            <li><strong>Apache Jena Fuseki:</strong> Triplestore to store and query RDF data.</li>
+            <li><strong>Apache Jena:</strong> Used in the web application for SPARQL queries and SHACL validation.</li>
+        </ul>
+    </div>
+
+    <div class="slide">
+        <h2>Interlinking and New Queries</h2>
+        <ul>
+            <li> <strong>Country List:</strong> "List all countries with their labels and codes." (Standalone query)</li>
+            <li> <strong>Country Detail:</strong> "What are the GDP, HDI, and Internet Usage values for Poland in 2020?" (Uses internal linking)</li>
+            <li> <strong>Statistics:</strong> "Combine GDP and HDI data for countries in 2019 and 2020." </li>
+            <li> <strong>Describe Observations:</strong> "What are all observations for India across datasets?" </li>
+            <li> <strong>Country Rankings: </strong> "What are the GDP and HDI rankings with a combined score for countries? </li>
+            <li> <strong>High HDI and Internet Usage:</strong> "Which countries have HDI > 0.9 and Internet Usage > 80%</li>
+        </ul>
+    </div>
+
+    <div class="slide">
+        <h2>Web Application Screenshots</h2>
+        <h3>Home Page</h3>
+        <img src="home-page.png" alt="Home Page Screenshot">
+        <h3>Country List</h3>
+        <img src="country-list.png" alt="Country List Screenshot">
+        <h3>Country Detail (USA)</h3>
+        <img src="country-detail.png" alt="Country Detail Screenshot">
+        <h3>Statistics Page</h3>
+        <img src="statistics.png" alt="Statistics Page Screenshot">
+    </div>
+</body>
+</html>

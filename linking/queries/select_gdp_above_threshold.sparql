@@ -1,0 +1,36 @@
+PREFIX ex: <http://example.org/nswi144/>
+PREFIX qb: <http://purl.org/linked-data/cube#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+
+SELECT ?countryLabel ?gdpValue ?hdiValue
+WHERE {
+    # GDP data
+    ?gdpObs rdf:type qb:Observation ;
+            qb:dataSet ex:gdpDataset ;
+            ex:refCountry ?country ;
+            ex:year "2020"^^xsd:gYear ;
+            ex:gdpValue ?gdpValue .
+
+
+    # Filter for GDP > 1 trillion USD
+    FILTER (?gdpValue > 1000000000000)
+
+    # Optionally get HDI data
+    OPTIONAL {
+        ?hdiObs a qb:Observation ;
+                qb:dataSet ex:hdiDataset ;
+                ex:refCountry ?linkedCountry ;
+                ex:year "2020"^^xsd:gYear ;
+                ex:hdiValue ?hdiValue .
+
+        # Use linkset to join countries
+        ?gdpObs owl:sameAs ?hdiObs .
+    }
+   ?country rdf:type ex:Country ;
+           skos:prefLabel ?countryLabel .
+}
+ORDER BY DESC(?hdiValue)
+LIMIT 30

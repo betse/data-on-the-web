@@ -1,0 +1,53 @@
+<Interlink id="hdiinternet_e7a54245b394ec5e" linkLimit="1000000" matchingExecutionTimeout="3600">
+  <MetaData>
+    <Label>hdi-internet</Label>
+    <Description xml:space="preserve"><![CDATA[]]></Description>
+    <Modified>2025-05-09T22:23:11.389113Z</Modified>
+    <Created>2025-05-09T22:14:54.253312Z</Created>
+    <Tags> </Tags>
+  </MetaData>
+  <SourceDataset dataSource="hidSource_1c88404999655d1c" var="a" typeUri="http://purl.org/linked-data/cube#Observation">
+    <RestrictTo xml:space="preserve">
+          
+        </RestrictTo>
+  </SourceDataset>
+  <TargetDataset dataSource="internetSource_4b762040babd74a8" var="b" typeUri="http://purl.org/linked-data/cube#Observation">
+    <RestrictTo xml:space="preserve">
+          
+        </RestrictTo>
+  </TargetDataset>
+  <LinkageRule linkType="&lt;http://www.w3.org/2002/07/owl#sameAs&gt;">
+    <Aggregate id="min" weight="1" type="min">
+      <Compare id="levenshteinDistance" weight="1" metric="levenshteinDistance" threshold="0.0" indexing="true">
+        <Input id="sourcePathInput" path="&lt;http://example.org/nswi144/refCountry&gt;"/>
+        <Input id="targetPathInput" path="&lt;http://example.org/nswi144/refCountry&gt;"/>
+        <Param name="minChar" xml:space="preserve"><![CDATA[0]]></Param>
+        <Param name="maxChar" xml:space="preserve"><![CDATA[z]]></Param>
+      </Compare>
+      <Compare id="levenshteinDistance_2" weight="1" metric="levenshteinDistance" threshold="0.0" indexing="true">
+        <Input id="sourcePathInput_2" path="&lt;http://example.org/nswi144/year&gt;"/>
+        <Input id="targetPathInput_2" path="&lt;http://example.org/nswi144/year&gt;"/>
+        <Param name="minChar" xml:space="preserve"><![CDATA[0]]></Param>
+        <Param name="maxChar" xml:space="preserve"><![CDATA[z]]></Param>
+      </Compare>
+    </Aggregate>
+    <Filter/>
+    <RuleLayout>
+      <NodePositions>
+        <NodePos id="targetPathInput" x="90" y="195"/>
+        <NodePos id="sourcePathInput" x="90" y="-60"/>
+        <NodePos id="levenshteinDistance_2" x="570" y="630"/>
+        <NodePos id="min" x="930" y="270"/>
+        <NodePos id="targetPathInput_2" x="120" y="765"/>
+        <NodePos id="sourcePathInput_2" x="105" y="540"/>
+        <NodePos id="levenshteinDistance" x="480" y="45"/>
+      </NodePositions>
+    </RuleLayout>
+    <UiAnnotations>
+      <StickyNotes> </StickyNotes>
+    </UiAnnotations>
+  </LinkageRule>
+  <Outputs>
+    <Output id="hdiinternetout_0499d144efd1223f"></Output>
+  </Outputs>
+</Interlink>

@@ -1,0 +1,15 @@
+<ProjectConfig resourceUri="http://silkframework.org/project/internallinking_b2231a4cee17c311">
+  <Prefixes>
+    <Prefix id="rdf" namespace="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+    <Prefix id="owl" namespace="http://www.w3.org/2002/07/owl#"/>
+    <Prefix id="rdfs" namespace="http://www.w3.org/2000/01/rdf-schema#"/>
+    <Prefix id="xsd" namespace="http://www.w3.org/2001/XMLSchema#"/>
+  </Prefixes>
+  <MetaData>
+    <Label>internal-linking</Label>
+    <Description xml:space="preserve"><![CDATA[]]></Description>
+    <Modified>2025-05-09T18:47:06.233242Z</Modified>
+    <Created>2025-05-09T18:47:06.233242Z</Created>
+    <Tags> </Tags>
+  </MetaData>
+</ProjectConfig>

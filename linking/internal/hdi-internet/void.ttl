@@ -1,0 +1,21 @@
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix ex: <http://example.org/nswi144/> .
+
+ex:hdiInternetLinkset a void:Linkset ;
+    void:Target ex:hdiDataset ;
+    void:Target ex:internetDataset ;
+    void:linkPredicate <http://www.w3.org/2002/07/owl#sameAs> ;
+    dcterms:title "Linkset between HDI and Internet Datasets"@en ;
+    dcterms:description "Links countries between HDI and Internet datasets based on country and year"@en ;
+    void:triples "4175" ;
+    void:exampleResource <http://example.org/nswi144/hdi/country_DZA> .
+
+ex:hdiDataset a void:Dataset ;
+    dcterms:title "HDI by Country Dataset"@en ;
+    void:dataDump <https://github.com/betse/data-on-the-web/blob/main/%20triplification/hdi-dataset/output/hdi.ttl> .  
+
+ex:internetDataset a void:Dataset ;
+    dcterms:title "Internet by Country Dataset"@en ;
+    void:dataDump <https://github.com/betse/data-on-the-web/blob/main/%20triplification/internet-usage-dataset/output/internet.ttl> .
+                     

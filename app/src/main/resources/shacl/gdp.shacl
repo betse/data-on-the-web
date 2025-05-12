@@ -1,0 +1,144 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix ex: <http://example.org/nswi144/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix qb: <http://purl.org/linked-data/cube#> .
+
+
+# Node shape (CountryShape) using a Property shape (CountryCodePropertyShape)
+# Validates resources of type ex:Country.
+ex:CountryShapeGDP a sh:NodeShape ;
+  sh:targetClass ex:Country ;
+  sh:severity sh:Violation ;
+  sh:message "Node is not a valid Country (GDP context)." ;
+  sh:property ex:CountryCodePropertyShapeGDP ;
+  sh:property [
+    sh:path skos:prefLabel ;
+    sh:minCount 1 ;
+    sh:message "Every Country must have at least one skos:prefLabel." ;
+    sh:severity sh:Violation ;
+  ] .
+
+# Property shape used by a node shape
+# Defines constraints for the ex:countryCode property.
+ex:CountryCodePropertyShapeGDP a sh:PropertyShape ;
+  sh:path ex:countryCode ;
+  sh:message "The ex:countryCode property has issues" ;
+  sh:severity sh:Violation ;
+  sh:datatype xsd:string ;
+  sh:minCount 1 ;
+  sh:maxCount 1 ;
+  sh:pattern "^[A-Z]{3}$" ;
+  sh:message "Country code must be a string of exactly 3 uppercase letters and must be present." ;
+  sh:name "country code property (GDP context)" .
+
+# Value type constraint
+# Validates that the ex:year property of qb:Observation is of type xsd:gYear.
+ex:ObservationYearShapeGDP a sh:NodeShape ;
+  sh:targetClass qb:Observation ;
+  sh:severity sh:Violation ;
+  sh:message "Observation year is not a valid Gregorian Year (GDP context)." ;
+  sh:property [
+    sh:path ex:year ;
+    sh:datatype xsd:gYear ;
+    sh:minCount 1 ;
+    sh:message "Observation must have an ex:year property with datatype xsd:gYear (GDP context)." ;
+  ] .
+
+# Validates the type of the ex:gdpValue property.
+ex:GdpValueTypeShape a sh:NodeShape ;
+  sh:targetClass qb:Observation ;
+  sh:severity sh:Violation ;
+  sh:message "GDP value is not a valid decimal." ;
+  sh:property [
+    sh:path ex:gdpValue ;
+    sh:datatype xsd:decimal ; # GDP value must be a decimal
+    sh:message "The ex:gdpValue must have datatype xsd:decimal." ;
+  ] .
+
+
+# Cardinality constraint
+# Validates that each qb:Observation has exactly one ex:refCountry.
+ex:RefCountryCardinalityShapeGDP a sh:NodeShape ;
+  sh:targetClass qb:Observation ;
+  sh:severity sh:Violation ;
+  sh:message "Observation must reference exactly one country (GDP context)." ;
+  sh:property [
+    sh:path ex:refCountry ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:message "An observation must have exactly one ex:refCountry (GDP context)." ;
+  ] .
+
+# Validates that a Country resource must have both an ex:countryCode and a skos:prefLabel.
+ex:CountryRequiredPropertiesShapeGDP a sh:NodeShape ;
+  sh:targetClass ex:Country ;
+  sh:severity sh:Violation ;
+  sh:message "Country must have both a country code and a preferred label." ;
+  sh:property [
+    sh:path ex:countryCode ;
+    sh:minCount 1 ;
+    sh:message "Missing country code."
+  ] ;
+  sh:property [
+    sh:path skos:prefLabel ;
+    sh:minCount 1 ;
+    sh:message "Missing preferred label."
+  ]  .
+
+# Validates that the object of the ex:refCountry property on a qb:Observation conforms to the CountryShape.
+ex:ObservationRefCountryShapeGDP a sh:NodeShape ;
+  sh:targetClass qb:Observation ;
+  sh:severity sh:Violation ;
+  sh:message "The referenced country does not conform to the CountryShape." ;
+  sh:property [
+    sh:path ex:refCountry ;
+    sh:node ex:CountryShapeGDP ;
+    sh:message "The resource referenced by ex:refCountry must be a valid Country." ;
+  ] .
+
+
+# Validates resources, GDP Observation must have gdpValue, GDP Indicator
+ex:GdpObservationShape a sh:NodeShape ;
+  sh:targetClass qb:Observation ;
+  sh:severity sh:Violation ;
+  sh:message "Node is not a valid GDP Observation." ;
+  sh:property [
+    sh:path qb:dataSet ;
+    sh:hasValue ex:gdpDataset ; # Ensure it belongs to the GDP dataset
+    sh:message "GDP Observation must belong to the ex:gdpDataset." ;
+    sh:severity sh:Violation ;
+  ] ;
+  sh:property [
+    sh:path ex:gdpValue ;
+    sh:minCount 1 ; # GDP value must be present
+    sh:message "GDP Observation must have an ex:gdpValue." ;
+    sh:severity sh:Violation ;
+  ] ;
+   sh:property [
+    sh:path qb:measureType ;
+    sh:minCount 1 ; # Indicator must be present
+    sh:class ex:GDPIndicator ; # Ensure the measure type is a GDP Indicator
+    sh:message "GDP Observation must have a qb:measureType that is an ex:GDPIndicator." ;
+    sh:severity sh:Violation ;
+  ] .
+
+# Validates resources of type ex:GDPIndicator. Every GDP Indicator must have at least one skos:prefLabel and one skos:notation
+ex:GdpIndicatorShape a sh:NodeShape ;
+  sh:targetClass ex:GDPIndicator ;
+  sh:severity sh:Violation ;
+  sh:message "Node is not a valid GDP Indicator." ;
+  sh:property [
+    sh:path skos:prefLabel ;
+    sh:minCount 1 ; # Indicator must have a label
+    sh:message "Every GDP Indicator must have at least one skos:prefLabel." ;
+    sh:severity sh:Violation ;
+  ] ;
+  sh:property [
+    sh:path skos:notation ;
+    sh:minCount 1 ; # Indicator must have a notation/code
+    sh:message "Every GDP Indicator must have at least one skos:notation." ;
+    sh:severity sh:Violation ;
+  ] .
